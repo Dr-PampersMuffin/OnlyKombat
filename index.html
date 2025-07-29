@@ -2,29 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>OnlyKombat – Multiplayer</title>
-
-  <!-- ✅ Phaser Game Engine -->
+  <title>OnlyKombat – Main Menu</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-
-  <!-- ✅ Socket.IO (for multiplayer) -->
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-
-  <!-- ✅ Main Game Logic -->
   <script type="module" src="js/main.js"></script>
-
-  <!-- ✅ Stylesheet -->
-  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div id="header">
-    <h1>🎮 OnlyKombat</h1>
-    <p>Connect • Mint • Fight • Earn</p>
-    <button onclick="window.location.href='https://onlycointoken.com'">Visit OnlyCoin</button>
+  <div class="lava-floor"></div>
+
+  <div class="menu-container">
+    <h1 class="bloody-title">ONLYKOMBAT</h1>
+    <div class="fighters-bg">
+      <img src="assets/sprites/frostbyte.png" class="fighter left">
+      <img src="assets/sprites/pyronyx.png" class="fighter right">
+    </div>
+    <div class="dragon-fire"></div>
+    <ul class="menu">
+      <li><a href="#" onclick="connectWallet()">💀 Connect Wallet</a></li>
+      <li><a href="#" onclick="mintFighter()">🩸 Mint Fighter</a></li>
+      <li><a href="#" onclick="stakeToPlay()">🔥 Stake 10 ONLY to Fight</a></li>
+    </ul>
   </div>
 
-  <canvas id="gameCanvas"></canvas>
+  <audio autoplay loop>
+    <source src="assets/sounds/mk_theme.mp3" type="audio/mpeg">
+  </audio>
 </body>
 </html>
-
