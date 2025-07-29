@@ -1,26 +1,56 @@
+import {
+  joinMatchmaking,
+  sendPlayerAction,
+  receiveOpponentAction
+} from './socket.js'; // assumes same /js/ folder
+
 export default class AdventureScene extends Phaser.Scene {
-  constructor() { super({ key: 'AdventureScene' }); }
+  constructor() {
+    super({ key: 'AdventureScene' });
+    this.roomId = null;
+  }
 
   preload() {
-    this.load.image("spider", "assets/sprites/spider.png");
-    this.load.image("bg1", "assets/arenas/kuwaiti_sandpit.png");
-    this.load.image("echo_vanta", "assets/sprites/echo_vanta.png");
+    this.load.image("bg", "assets/arenas/kuwaiti_sandpit.png");
+    this.load.image("player1", "assets/sprites/echo_vanta.png");
+    this.load.image("player2", "assets/sprites/pyronyx.png");
   }
 
   create() {
-    this.add.image(400, 300, "bg1");
-    this.enemy = this.physics.add.sprite(600, 300, "spider").setScale(2);
-    this.player = this.physics.add.sprite(200, 300, "echo_vanta").setScale(2);
+    this.add.image(400, 300, "bg");
+    this.player = this.physics.add.sprite(200, 300, "player1").setScale(2);
+    this.opponent = this.physics.add.sprite(600, 300, "player2").setScale(2);
 
-    this.physics.add.collider(this.player, this.enemy, this.handleHit, null, this);
+    // Join matchmaking
+    joinMatchmaking((players) => {
+      console.log("Matched:", players);
+      this.roomId = `room_${players[0]}`; // or however your backend defines rooms
+    });
 
-    this.input.keyboard.on("keydown-SPACE", () => {
-      this.enemy.setVelocityX(-200);
+    // Keyboard movement + broadcast
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.input.keyboard.on("keydown", (e) => {
+      if (!this.roomId) return;
+
+      if (e.code === "ArrowRight") {
+        this.player.x += 10;
+        sendPlayerAction(this.roomId, { action: "moveRight" });
+      }
+      if (e.code === "ArrowLeft") {
+        this.player.x -= 10;
+        sendPlayerAction(this.roomId, { action: "moveLeft" });
+      }
+    });
+
+    // Receive opponent moves
+    receiveOpponentAction((data) => {
+      if (data.action === "moveRight") this.opponent.x += 10;
+      if (data.action === "moveLeft") this.opponent.x -= 10;
     });
   }
 
-  handleHit() {
-    this.enemy.destroy();
-    this.add.text(300, 280, "🏆 Victory!", { fontSize: "32px", fill: "#0f0" });
+  update() {
+    // Optional real-time updates here
   }
 }
