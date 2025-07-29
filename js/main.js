@@ -1,18 +1,14 @@
-import AdventureScene from './adventureScene.js';
+import MultiplayerScene from './adventureScene.js'; // You can rename this
 
 const config = {
   type: Phaser.AUTO,
   width: 800,
   height: 600,
-  parent: 'gameCanvas',
-  backgroundColor: '#000000',
-  scene: [AdventureScene],
+  backgroundColor: "#000",
+  scene: [MultiplayerScene],
   physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 0 },
-      debug: false
-    }
+    default: "arcade",
+    arcade: { gravity: { y: 0 }, debug: false }
   }
 };
 
